@@ -28,23 +28,22 @@ final class SettingsVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setup()
         setupViews()
         setupConstraints()
     }
     
     //MARK: - Action
     @objc func switchControl() {
-        let index = segmentControl.selectedSegmentIndex
-        // logic
+        
     }
 }
-
 
 
 extension SettingsVC {
     
     func setup() {
-        title = "Настройки"
+        view.backgroundColor = .systemIndigo
     }
     
     func setupViews() {

@@ -5,10 +5,10 @@ final class WeatherVC: UIViewController {
     
     private lazy var degreeLabel: UILabel = {
        let label = UILabel()
-        label.text = "25 C"
+        label.text = "Сегодня 25 C"
         label.textAlignment = .center
         label.textColor = .white
-        label.font = UIFont.boldSystemFont(ofSize: 30)
+        label.font = UIFont.systemFont(ofSize: 35, weight: .regular)
         return label
     }()
     
@@ -20,6 +20,7 @@ final class WeatherVC: UIViewController {
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = .systemIndigo
+        collectionView.showsVerticalScrollIndicator = false
         
         collectionView.delegate = self
         collectionView.dataSource = self

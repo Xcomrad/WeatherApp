@@ -8,8 +8,37 @@ final class WeatherCell: UICollectionViewCell {
     private lazy var verticalStackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
-        stack.spacing = 10
+        stack.spacing = 5
+        stack.distribution = .equalSpacing
         return stack
+    }()
+    
+    private lazy var timeLabel: UILabel = {
+       let label = UILabel()
+        label.text = "Дата 28.06.2024"
+        label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        return label
+    }()
+    
+    private lazy var teperetureLabel: UILabel = {
+       let label = UILabel()
+        label.text = "Температура 25 C"
+        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        return label
+    }()
+    
+    private lazy var humidityLabel: UILabel = {
+       let label = UILabel()
+        label.text = "Влажность 16 %"
+        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        return label
+    }()
+    
+    private lazy var windSpeedLabel: UILabel = {
+       let label = UILabel()
+        label.text = "Ветер 3 м/с"
+        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        return label
     }()
     
     override init(frame: CGRect) {
@@ -22,23 +51,32 @@ final class WeatherCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+
+
+extension WeatherCell {
     
     func setup() {
-        contentView.backgroundColor = .systemGray6
-        contentView.layer.cornerRadius = 20
-        contentView.layer.shadowColor = UIColor.black.cgColor
-        contentView.layer.shadowOpacity = 0.2
-        contentView.layer.shadowOffset = CGSize(width: 0, height: 2)
-        contentView.layer.shadowRadius = 4
+        self.backgroundColor = .systemGray6
+        self.layer.cornerRadius = 20
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOpacity = 0.5
+        self.layer.shadowOffset = CGSize(width: 0, height: 5)
+        self.layer.shadowRadius = 5
     }
     
     func setupView() {
         contentView.addSubview(verticalStackView)
+        verticalStackView.addArrangedSubview(timeLabel)
+        verticalStackView.addArrangedSubview(teperetureLabel)
+        verticalStackView.addArrangedSubview(humidityLabel)
+        verticalStackView.addArrangedSubview(windSpeedLabel)
     }
     
     func setupConstraints() {
         verticalStackView.snp.makeConstraints { make in
-            make.edges.equalTo(contentView)
+            make.edges.equalTo(self).inset(10)
         }
     }
 }

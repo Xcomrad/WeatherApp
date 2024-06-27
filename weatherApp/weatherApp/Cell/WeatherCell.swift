@@ -15,28 +15,24 @@ final class WeatherCell: UICollectionViewCell {
     
     private lazy var timeLabel: UILabel = {
        let label = UILabel()
-        label.text = "Дата 28.06.2024"
         label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         return label
     }()
     
-    private lazy var teperetureLabel: UILabel = {
+    private lazy var temperatureLabel: UILabel = {
        let label = UILabel()
-        label.text = "Температура 25 C"
         label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         return label
     }()
     
     private lazy var humidityLabel: UILabel = {
        let label = UILabel()
-        label.text = "Влажность 16 %"
         label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         return label
     }()
     
     private lazy var windSpeedLabel: UILabel = {
        let label = UILabel()
-        label.text = "Ветер 3 м/с"
         label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         return label
     }()
@@ -51,6 +47,14 @@ final class WeatherCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    //MARK: - Update
+    func update(time: String, temperature: Double, humidity: Int, windSpeed: Double) {
+            timeLabel.text = "Время: \(time)"
+            temperatureLabel.text = "Темпаратура: \(temperature)°C"
+            humidityLabel.text = "Влажность: \(humidity)%"
+            windSpeedLabel.text = "Ветер: \(windSpeed) м/c"
+        }
 }
 
 
@@ -69,7 +73,7 @@ extension WeatherCell {
     func setupView() {
         contentView.addSubview(verticalStackView)
         verticalStackView.addArrangedSubview(timeLabel)
-        verticalStackView.addArrangedSubview(teperetureLabel)
+        verticalStackView.addArrangedSubview(temperatureLabel)
         verticalStackView.addArrangedSubview(humidityLabel)
         verticalStackView.addArrangedSubview(windSpeedLabel)
     }

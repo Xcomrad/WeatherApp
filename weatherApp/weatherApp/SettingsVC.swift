@@ -35,11 +35,9 @@ final class SettingsVC: UIViewController {
     
     //MARK: - Action
     @objc func switchControl() {
-        //let index = segmentControl.selectedSegmentIndex
-        // logic
+        
     }
 }
-
 
 
 extension SettingsVC {

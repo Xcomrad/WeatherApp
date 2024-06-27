@@ -3,9 +3,11 @@ import UIKit
 
 final class WeatherVC: UIViewController {
     
+    private let weatherService = WeatherService()
+    private var weatherData: WeatherData?
+    
     private lazy var degreeLabel: UILabel = {
-       let label = UILabel()
-        label.text = "Сегодня 25 C"
+        let label = UILabel()
         label.textAlignment = .center
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 35, weight: .regular)
@@ -34,10 +36,52 @@ final class WeatherVC: UIViewController {
         setup()
         setupView()
         setupConstraints()
+        
+        fetchWeather()
     }
     
+    private func fetchWeather() {
+        let latitude = 52.0609511
+        let longitude = 23.7397570
+        weatherService.getWeatherData(latitude: latitude, longitude: longitude) { [weak self] weather in
+            DispatchQueue.main.async {
+                guard let weather = weather else { return }
+                self?.weatherData = weather
+                self?.collectionView.reloadData()
+            }
+        }
+    }
+}
+
+
+
+extension WeatherVC: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return weatherData?.hourly.time.count ?? 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeatherCell.reuseId, for: indexPath) as! WeatherCell
+        if let weatherData = weatherData {
+            let currentTemp = weatherData.current.temperature_2m
+            let time = weatherData.hourly.time[indexPath.row]
+            let temperature = weatherData.hourly.temperature_2m[indexPath.row]
+            let humidity = weatherData.hourly.relative_humidity_2m[indexPath.row]
+            let windSpeed = weatherData.hourly.wind_speed_10m[indexPath.row]
+            
+            degreeLabel.text = "Сейчас \(currentTemp)°C"
+            cell.update(time: time, temperature: temperature, humidity: humidity, windSpeed: windSpeed)
+        }
+        return cell
+    }
+}
+
+
+
+extension WeatherVC {
+    
     func setup() {
-        title = "Погода"
         view.backgroundColor = .systemIndigo
     }
     
@@ -58,19 +102,5 @@ final class WeatherVC: UIViewController {
             make.bottom.equalTo(view.safeAreaLayoutGuide)
             make.leading.trailing.equalTo(view)
         }
-    }
-}
-
-
-
-extension WeatherVC: UICollectionViewDelegate, UICollectionViewDataSource {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeatherCell.reuseId, for: indexPath) as! WeatherCell
-        return cell
     }
 }

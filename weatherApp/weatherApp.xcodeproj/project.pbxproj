@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		261E7D7F2C2D61C200603135 /* WeatherVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261E7D7E2C2D61C200603135 /* WeatherVC.swift */; };
 		261E7D812C2D627800603135 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261E7D802C2D627800603135 /* SettingsVC.swift */; };
+		261E7D832C2D7A6400603135 /* WeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261E7D822C2D7A6400603135 /* WeatherCell.swift */; };
 		265F25822C2D40010038E6C1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265F25812C2D40010038E6C1 /* AppDelegate.swift */; };
 		265F25842C2D40010038E6C1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265F25832C2D40010038E6C1 /* SceneDelegate.swift */; };
 		265F25862C2D40010038E6C1 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 265F25852C2D40010038E6C1 /* MainTabBarController.swift */; };
@@ -19,6 +20,7 @@
 /* Begin PBXFileReference section */
 		261E7D7E2C2D61C200603135 /* WeatherVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherVC.swift; sourceTree = "<group>"; };
 		261E7D802C2D627800603135 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
+		261E7D822C2D7A6400603135 /* WeatherCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherCell.swift; sourceTree = "<group>"; };
 		265F257E2C2D40010038E6C1 /* weatherApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = weatherApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		265F25812C2D40010038E6C1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		265F25832C2D40010038E6C1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -61,6 +63,7 @@
 				265F25952C2D40E60038E6C1 /* App */,
 				265F25852C2D40010038E6C1 /* MainTabBarController.swift */,
 				261E7D7E2C2D61C200603135 /* WeatherVC.swift */,
+				261E7D822C2D7A6400603135 /* WeatherCell.swift */,
 				261E7D802C2D627800603135 /* SettingsVC.swift */,
 				265F25962C2D41040038E6C1 /* Resources */,
 			);
@@ -162,6 +165,7 @@
 			files = (
 				265F25862C2D40010038E6C1 /* MainTabBarController.swift in Sources */,
 				265F25822C2D40010038E6C1 /* AppDelegate.swift in Sources */,
+				261E7D832C2D7A6400603135 /* WeatherCell.swift in Sources */,
 				265F25842C2D40010038E6C1 /* SceneDelegate.swift in Sources */,
 				261E7D7F2C2D61C200603135 /* WeatherVC.swift in Sources */,
 				261E7D812C2D627800603135 /* SettingsVC.swift in Sources */,

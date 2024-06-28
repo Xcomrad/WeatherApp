@@ -1,8 +1,10 @@
 
 import UIKit
+import CoreLocation
 
 final class WeatherVC: UIViewController {
     
+    private var locationManager = CLLocationManager()
     private let weatherService = WeatherService()
     private var weatherData: WeatherData?
     
@@ -37,19 +39,17 @@ final class WeatherVC: UIViewController {
         setupView()
         setupConstraints()
         
-        fetchWeather()
+        startLocationManager()
     }
     
-    private func fetchWeather() {
-        let latitude = 52.0609511
-        let longitude = 23.7397570
-        weatherService.getWeatherData(latitude: latitude, longitude: longitude) { [weak self] weather in
-            DispatchQueue.main.async {
-                guard let weather = weather else { return }
-                self?.weatherData = weather
-                self?.collectionView.reloadData()
-            }
-        }
+    //MARK: - Location
+    private func startLocationManager() {
+        locationManager.requestWhenInUseAuthorization()
+        
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.pausesLocationUpdatesAutomatically = false
+        locationManager.startUpdatingLocation()
     }
 }
 
@@ -58,22 +58,48 @@ final class WeatherVC: UIViewController {
 extension WeatherVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return weatherData?.hourly.time.count ?? 0
+        return weatherData?.hourly.relativeHumidity2m.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeatherCell.reuseId, for: indexPath) as! WeatherCell
+        update(indexPath.row, cell)
+        return cell
+    }
+}
+
+
+
+extension WeatherVC: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let lastLocation = locations.last {
+            weatherService.getWeatherData(latitude: lastLocation.coordinate.latitude, longitude: lastLocation.coordinate.longitude) { [weak self] weather in
+                DispatchQueue.main.async {
+                    guard let weather else { return }
+                    self?.weatherData = weather
+                    self?.collectionView.reloadData()
+                }
+            }
+        }
+        locationManager.stopUpdatingLocation()
+    }
+}
+
+
+
+extension WeatherVC {
+    // MARK: - Update
+    func update(_ indexPath: Int, _ cell: WeatherCell) {
         if let weatherData = weatherData {
-            let currentTemp = weatherData.current.temperature_2m
-            let time = weatherData.hourly.time[indexPath.row]
-            let temperature = weatherData.hourly.temperature_2m[indexPath.row]
-            let humidity = weatherData.hourly.relative_humidity_2m[indexPath.row]
-            let windSpeed = weatherData.hourly.wind_speed_10m[indexPath.row]
+            let currentTemp = weatherData.current.temperature2m
+            let time = weatherData.hourly.time[indexPath]
+            let temperature = weatherData.hourly.temperature2m[indexPath]
+            let humidity = weatherData.hourly.relativeHumidity2m[indexPath]
+            let windSpeed = weatherData.hourly.windSpeed10m[indexPath]
             
             degreeLabel.text = "Сейчас \(currentTemp)°C"
             cell.update(time: time, temperature: temperature, humidity: humidity, windSpeed: windSpeed)
         }
-        return cell
     }
 }
 

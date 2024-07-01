@@ -1,10 +1,10 @@
 
 import UIKit
 
-final class WeatherVC: UIViewController {
+class WeatherView: UIView {
     
-    private let weatherService = WeatherService()
-    private var weatherData: WeatherData?
+    let weatherService = WeatherService()
+    var weatherData: WeatherData?
     
     private lazy var degreeLabel: UILabel = {
         let label = UILabel()
@@ -14,7 +14,7 @@ final class WeatherVC: UIViewController {
         return label
     }()
     
-    private lazy var collectionView: UICollectionView = {
+    lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 50, height: 100)
         layout.minimumLineSpacing = 30
@@ -31,76 +31,72 @@ final class WeatherVC: UIViewController {
         return collectionView
     }()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setup()
         setupView()
         setupConstraints()
-        
-        fetchWeather()
     }
     
-    private func fetchWeather() {
-        let latitude = 52.0609511
-        let longitude = 23.7397570
-        weatherService.getWeatherData(latitude: latitude, longitude: longitude) { [weak self] weather in
-            DispatchQueue.main.async {
-                guard let weather = weather else { return }
-                self?.weatherData = weather
-                self?.collectionView.reloadData()
-            }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Update
+    func update(_ indexPath: Int, _ cell: WeatherCell) {
+        if let weatherData = weatherData {
+            let currentTemp = weatherData.current.temperature2m
+            let time = weatherData.hourly.time[indexPath]
+            let temperature = weatherData.hourly.temperature2m[indexPath]
+            let humidity = weatherData.hourly.relativeHumidity2m[indexPath]
+            let windSpeed = weatherData.hourly.windSpeed10m[indexPath]
+            
+            degreeLabel.text = "Сейчас \(currentTemp)°C"
+            cell.update(time: time, temperature: temperature, humidity: humidity, windSpeed: windSpeed)
         }
     }
 }
 
 
 
-extension WeatherVC: UICollectionViewDelegate, UICollectionViewDataSource {
+extension WeatherView: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return weatherData?.hourly.time.count ?? 0
+        return weatherData?.hourly.relativeHumidity2m.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeatherCell.reuseId, for: indexPath) as! WeatherCell
-        if let weatherData = weatherData {
-            let currentTemp = weatherData.current.temperature_2m
-            let time = weatherData.hourly.time[indexPath.row]
-            let temperature = weatherData.hourly.temperature_2m[indexPath.row]
-            let humidity = weatherData.hourly.relative_humidity_2m[indexPath.row]
-            let windSpeed = weatherData.hourly.wind_speed_10m[indexPath.row]
-            
-            degreeLabel.text = "Сейчас \(currentTemp)°C"
-            cell.update(time: time, temperature: temperature, humidity: humidity, windSpeed: windSpeed)
-        }
+        update(indexPath.row, cell)
         return cell
     }
 }
 
 
 
-extension WeatherVC {
+extension WeatherView {
     
     func setup() {
-        view.backgroundColor = .systemIndigo
+        backgroundColor = .systemIndigo
     }
     
     func setupView() {
-        view.addSubview(degreeLabel)
-        view.addSubview(collectionView)
+        addSubview(degreeLabel)
+        addSubview(collectionView)
     }
     
     func setupConstraints() {
         
         degreeLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide)
-            make.leading.trailing.equalTo(view).inset(50)
+            make.top.equalTo(self.safeAreaLayoutGuide)
+            make.leading.trailing.equalTo(self).inset(50)
         }
         
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(degreeLabel.snp.top).inset(50)
-            make.bottom.equalTo(view.safeAreaLayoutGuide)
-            make.leading.trailing.equalTo(view)
+            make.bottom.equalTo(self.safeAreaLayoutGuide)
+            make.leading.trailing.equalTo(self)
         }
     }
 }

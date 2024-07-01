@@ -17,13 +17,33 @@ final class MainTabBarController: UITabBarController {
         styleTabBarItems()
     }
     
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupTabBarScreens()
+        setupStyle()
+        setupAppearance()
+    }
+    
+    private func setupAppearance() {
+        let isDarkMode = UserDefaults.standard.bool(forKey: "isDarkMode")
+        let style: UIUserInterfaceStyle = isDarkMode ? .dark : .light
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .forEach { windowScene in
+                windowScene.windows.forEach { window in
+                    window.overrideUserInterfaceStyle = style
+                }
+            }
+    }
+    
     func setupStyle() {
-        tabBar.barTintColor = .systemGray6
-        tabBar.tintColor = .white
+        tabBar.backgroundColor = .systemGray6
+        tabBar.tintColor = .systemIndigo
         tabBar.unselectedItemTintColor = .gray
         tabBar.layer.borderWidth = 1
-        tabBar.layer.borderColor = UIColor.white.cgColor
-        tabBar.layer.cornerRadius = 30
+        tabBar.layer.borderColor = UIColor.gray.cgColor
+        tabBar.layer.cornerRadius = 20
         tabBar.clipsToBounds = true
     }
     
@@ -33,13 +53,5 @@ final class MainTabBarController: UITabBarController {
             item.setTitleTextAttributes([.font: UIFont.systemFont(ofSize: 15, weight: .medium)], for: .normal)
         }
     }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.backgroundColor = .systemIndigo
-        setupTabBarScreens()
-        setupStyle()
-        
-    }
 }
-    
+

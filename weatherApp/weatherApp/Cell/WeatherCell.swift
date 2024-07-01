@@ -62,12 +62,12 @@ final class WeatherCell: UICollectionViewCell {
 extension WeatherCell {
     
     func setup() {
-        self.backgroundColor = .systemGray6
-        self.layer.cornerRadius = 20
-        self.layer.shadowColor = UIColor.black.cgColor
-        self.layer.shadowOpacity = 0.5
-        self.layer.shadowOffset = CGSize(width: 0, height: 5)
-        self.layer.shadowRadius = 5
+        backgroundColor = .systemGray6
+        layer.cornerRadius = 20
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 0.5
+        layer.shadowOffset = CGSize(width: 0, height: 5)
+        layer.shadowRadius = 5
     }
     
     func setupView() {

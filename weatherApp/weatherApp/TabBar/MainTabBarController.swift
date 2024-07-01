@@ -16,12 +16,25 @@ final class MainTabBarController: UITabBarController {
         
         styleTabBarItems()
     }
-
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTabBarScreens()
         setupStyle()
+        setupAppearance()
+    }
+    
+    private func setupAppearance() {
+        let isDarkMode = UserDefaults.standard.bool(forKey: "isDarkMode")
+        let style: UIUserInterfaceStyle = isDarkMode ? .dark : .light
+        UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .forEach { windowScene in
+                windowScene.windows.forEach { window in
+                    window.overrideUserInterfaceStyle = style
+                }
+            }
     }
     
     func setupStyle() {
@@ -41,4 +54,4 @@ final class MainTabBarController: UITabBarController {
         }
     }
 }
-    
+

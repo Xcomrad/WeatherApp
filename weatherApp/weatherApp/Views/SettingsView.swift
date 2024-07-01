@@ -4,6 +4,7 @@ import UIKit
 final class SettingsView: UIView {
     
     var completionSwithTheme: (()->())?
+    var completionSwitchTemp: (()->())?
     
     lazy var unitLabel: UILabel = {
         let label = UILabel()
@@ -24,7 +25,7 @@ final class SettingsView: UIView {
         control.layer.shadowRadius = 4
         control.layer.shadowOpacity = 0.3
         control.layer.masksToBounds = false
-        control.addTarget(self, action: #selector(switchControl), for: .touchUpInside)
+        control.addTarget(self, action: #selector(switchTemp), for: .touchUpInside)
         return control
     }()
     
@@ -39,16 +40,15 @@ final class SettingsView: UIView {
     lazy var segmentControlTheme: UISegmentedControl = {
         let items = ["Дневная", "Ночная"]
         let control = UISegmentedControl(items: items)
-        control.selectedSegmentIndex = UserDefaults.standard.integer(forKey: "theme")
+        control.selectedSegmentIndex = UserDefaults.standard.bool(forKey: "isDarkMode") ? 1 : 0
         control.backgroundColor = .systemGray6
-        control.selectedSegmentIndex = 0
         control.layer.cornerRadius = 8
         control.layer.shadowColor = UIColor.white.cgColor
         control.layer.shadowOffset = CGSize(width: 0, height: 2)
         control.layer.shadowRadius = 4
         control.layer.shadowOpacity = 0.3
         control.layer.masksToBounds = false
-        control.addTarget(self, action: #selector(switchTheme), for: .touchUpInside)
+        control.addTarget(self, action: #selector(switchTheme), for: .valueChanged)
         return control
     }()
     
@@ -64,12 +64,12 @@ final class SettingsView: UIView {
     }
     
     //MARK: - Actions
-    @objc func switchControl() {
-      
+    @objc func switchTemp(_ sender: UISegmentedControl) {
+        completionSwitchTemp?()
     }
     
-    @objc func switchTheme() {
-       
+    @objc func switchTheme(_ sender: UISegmentedControl) {
+        completionSwithTheme?()
     }
 }
 
